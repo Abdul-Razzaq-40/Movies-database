@@ -1,0 +1,49 @@
+package moviess;
+
+import java.sql.*;
+
+public class Moviess {
+    public static void main(String[] args) {
+		try {
+                    //confirming the connection of the database with mysql database using jdbc api
+                    Connection myCon = DriverManager.getConnection("jdbc:mysql:///films","root","");
+                    String sql = "select * from film where name='PK' and director='Rajkumar Hirani'";   
+                    Statement myStmt = myCon.createStatement();
+                    ResultSet rs = myStmt.executeQuery(sql);
+                     if (rs.next()) {
+                        System.out.println("The movie is present");
+                        
+                    }  else {
+			System.out.println("The movie is not present");
+                    }
+                     
+                    //creating a new table and inserting data into the table of the database using java program                     
+                    Statement s = myCon.createStatement();  
+                    s.execute("create table Movies ( Movie varchar(30),Actor varchar(30),Actress varchar(30),Director varchar(30),Releaseyear int )");
+                    s.execute("insert into Movies values('Zero','Shah Rukh','Anushka Sharma','Aanand L. Rai',2018)");
+                    s.execute("insert into Movies values('Chennai Express','Shah Rukh','Deepika Padukone','Rohit Shetty',2013)");
+                    s.execute("insert into Movies values('Shershaah','Sidharth Malhotra','Kiara Advani','Vishnuvardhan',2021)");
+                    s.execute("insert into Movies values('Student of the year','Sidharth Malhotra','Alia Bhatt','Karan Johar', 2012)");
+                    Statement myStmt2 = myCon.createStatement();
+
+                    //querying data from Movies table without parameters
+                    String sql2="select * from Movies";    
+                    ResultSet rs2 = myStmt2.executeQuery(sql2);
+                    while(rs2.next()){
+                        System.out.println(rs2.getString("Movie")+"   "+rs2.getString("Actor")+"   "+rs2.getString("Actress")+"   "+rs2.getString("Director")+"   "+rs2.getString("Releaseyear"));
+                    }
+                    
+                    //querying data from Movies table with parameters
+                    Statement myStmt3 = myCon.createStatement();
+                    String sql3="select * from Movies where actor='Sidharth Malhotra' and actress='Kiara Advani'";    
+                    ResultSet rs3 = myStmt3.executeQuery("select * from Movies where actor='Shah Rukh Khan' and actress='Deepika padukone'");
+                    if(rs3.next()){
+                        System.out.println(rs3.getString("Movie")+"   "+rs3.getString("Actor")+"   "+rs3.getString("Actress")+"   "+rs3.getString("Director")+"   "+rs3.getString("Releaseyear"));
+                    }
+                    
+                //handling expections
+		} catch (Exception e2) {
+                    e2.printStackTrace();
+		}
+    }
+}
